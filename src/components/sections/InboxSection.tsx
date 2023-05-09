@@ -58,7 +58,7 @@ export const InboxSection: React.FC = () => {
                 {isLoading ?
                     <div className="flex items-center justify-center h-full">
                         <div className="flex flex-col gap-6">
-                            <VscLoading className="animate-spin w-8 h-8" />
+                            <VscLoading className="animate-spin w-8 h-8 mx-auto" />
                             <span className="text-[#4F4F4F]">
                                 Loading Chats ...
                             </span>
