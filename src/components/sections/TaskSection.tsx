@@ -1,9 +1,10 @@
-import { VscChevronDown } from "react-icons/vsc";
+import { VscChevronDown, VscLoading } from "react-icons/vsc";
 import { Button } from "../buttons/base/Button"
 import { TaskCard } from "../cards/TaskCard"
 import * as Select from '@radix-ui/react-select';
 import { useState } from "react";
 import { NewTaskCard } from "../cards/NewTaskCard";
+import { useQuery } from "react-query";
 
 export const TaskSection: React.FC = () => {
   const [openOptionTask, setOpenOptionTask] = useState<boolean>(false)
@@ -15,6 +16,12 @@ export const TaskSection: React.FC = () => {
     date: new Date(),
     tags: []
   })
+
+  const { isLoading, error, data } = useQuery('taskData', () =>
+    fetch('https://jsonplaceholder.typicode.com/users').then(res =>
+      res.json()
+    )
+  )
 
   const handleAddNewTask = () => {
     setOpenNewForm(() => true)
@@ -83,11 +90,22 @@ export const TaskSection: React.FC = () => {
       </div>
 
       <div className="h-full overflow-auto divide-y-2">
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
+        {isLoading ?
+          <div className="flex items-center justify-center h-full">
+            <div className="flex flex-col gap-6">
+              <VscLoading className="animate-spin w-8 h-8 mx-auto" />
+              <span className="text-[#4F4F4F]">
+                Loading Chats ...
+              </span>
+            </div>
+          </div>
+          : null
+        }
+
+        {(data && !isLoading) && data?.map((item: any) => (
+          <TaskCard data={item} key={item?.id} />
+        ))}
+
         {openNewForm ?
           <NewTaskCard
             onCancel={() => setOpenNewForm(() => false)}

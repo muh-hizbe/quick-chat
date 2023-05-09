@@ -6,9 +6,10 @@ import { TaskOptionButton } from '../buttons/TaskOptionButton';
 import { MdOutlineModeEdit } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
 
-export const TaskCard: React.FC = () => {
-    const [isChecked, setIsChecked] = useState<boolean>(false)
-    const [collapsed, setCollapsed] = useState<boolean>(false)
+export const TaskCard: React.FC<any> = ({ data }) => {
+    const [isChecked, setIsChecked] = useState<boolean>(data?.id % 2 === 0 ? true : false)
+    const [collapsed, setCollapsed] = useState<boolean>(data?.id % 3 === 0 ? true : false)
+    const [description, setDescription] = useState<string>(data?.company?.catchPhrase ?? '')
 
     return (
         <div className="flex items-start justify-between w-full py-[22px]">
@@ -31,7 +32,7 @@ export const TaskCard: React.FC = () => {
             <div className='w-full mr-[15px] ml-[22px]'>
                 <div className='flex items-start justify-between'>
                     <div className={`leading-none ${isChecked ? 'text-[#828282] line-through' : 'text-[#4F4F4F]'}`}>
-                        Check and Revise Set up documentation report for several Cases: Case 125434, Case 12312432, and Case 3123321
+                        {data?.name}
                     </div>
 
                     <div className='flex items-center text-[#4F4F4F] text-xs'>
@@ -70,6 +71,8 @@ export const TaskCard: React.FC = () => {
                             <TextareaAutosize
                                 placeholder={'No Description'}
                                 className='rounded-lg focus:p-3 focus:border w-full focus:outline-none resize-none min-h-[50px]'
+                                value={description}
+                                onChange={(e) => setDescription(() => e?.target?.value)}
                             />
                         </div>
                     </div>
